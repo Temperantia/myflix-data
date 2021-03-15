@@ -1,0 +1,5 @@
+firebase_admin
+imdbpy
+python-slugify
+progress
+meilisearch
