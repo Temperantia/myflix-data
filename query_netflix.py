@@ -58,7 +58,6 @@ def create_route(title: str, type: str, id: int) -> str:
       title_ids[id] += 1
     route = create_route(title, type, title_ids[id] + 1)
   types[route] = type
-  print(types)
   return route
 
 
@@ -87,7 +86,7 @@ def fetch_video(video_id: str, shows: Dict[str, Any], genre_dict: Dict[str, List
         "path": """["videos", """ + dumps(video_id) + """, "storyArt","_1920x1080", "png"]"""}
     response = post(netflix.url, json=data, headers=netflix.headers).json()
     storyArts = response['jsonGraph']['videos']
-
+    print(response)
     for video_id, video in objects.items():
       if not 'title' in video or not video['title'] or not 'value' in video['title'] or not video['title']['value']:
         continue
