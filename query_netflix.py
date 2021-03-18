@@ -39,11 +39,11 @@ def list_until_empty(data: Dict[str, Any], k: Optional[str] = None):
   return l
 
 
-def find_genre_name(genre_id: str, genre_dict: Dict[str, str]):
+def find_genre_name(genre_id: str, genre_dict: Dict[str, List[str]]):
   for genre in genre_dict:
     if genre == genre_id:
       return genre_dict[genre]
-  return ''
+  return []
 
 
 def create_route(title: str, type: str, id: int) -> str:
@@ -71,7 +71,7 @@ def find_categories(genres: List[str]):
   return categories
 
 
-def fetch_video(video_id: str, shows: Dict[str, Any], genre_dict: Dict[str, str]):
+def fetch_video(video_id: str, shows: Dict[str, Any], genre_dict: Dict[str, List[str]]):
   data = {
       "path": """["videos", """ + dumps(video_id) + """, ["title", "synopsis", "seasonCount", "episodeCount", "releaseYear", "maturity", "availability", "genres", "moodTags", "creators", "directors", "writers", "cast"],{"from":0,"to":3},["name"] ]"""}
   try:
@@ -141,7 +141,7 @@ def fetch_video(video_id: str, shows: Dict[str, Any], genre_dict: Dict[str, str]
     print(e, video_id)
 
 
-def get_videos(videos):
+def get_videos(videos: Dict[str, str]):
   #genre_dict = file.read_json('data/genres.json')
 
   videos.update(file.read_json('data/video_summary.json'))
@@ -171,7 +171,3 @@ def get_videos(videos):
         ' shows and ' + str(movie_count) + ' movies')
 
   file.write_json('data/videos.json', videos)
-
-
-if __name__ == '__main__':
-  get_videos()
