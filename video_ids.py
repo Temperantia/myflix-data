@@ -10,13 +10,13 @@ error = 0
 
 def rangeCollect(index: int, rng: int, videos):
   global error
-  #print('Collecting ' + str(index) + ' to ' + str(index + rng))
   ids = [str(i) for i in range(index, index + rng)]
   data = {
       "path": """["videos", """ + dumps(ids) + """, "title"]"""}
   try:
     response = post(netflix.url, json=data, headers=netflix.headers)
     response = response.json()
+    print(response)
     objects = response['jsonGraph']['videos']
     for video_id in objects:
       video = objects[video_id]
@@ -66,6 +66,7 @@ def get_ids():
   for i in range(3040):  # 80_986_788 - 81 290 762 = 303,974
     index = 80_986_788 + i * 100
     args.append((index, 100, videos))
+  args = [args[0]]
   threads.threads(rangeCollect, args, 0.02, 'Scanning ids')
   print(error)
   print('Collected ' + str(len(videos)) + ' ids')
