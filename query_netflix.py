@@ -76,6 +76,7 @@ def fetch_video(video_id: str, shows: Dict[str, Any], genre_dict: Dict[str, List
       "path": """["videos", """ + dumps(video_id) + """, ["title", "synopsis", "seasonCount", "episodeCount", "releaseYear", "maturity", "availability", "genres", "moodTags", "creators", "directors", "writers", "cast"],{"from":0,"to":3},["name"] ]"""}
   try:
     response = post(netflix.url, json=data, headers=netflix.headers).json()
+    print(response)
     objects = response['jsonGraph']['videos']
     people: Dict[str, Any] = response['jsonGraph']['person'] if 'person' in response['jsonGraph'] else {}
     data = {
@@ -86,7 +87,7 @@ def fetch_video(video_id: str, shows: Dict[str, Any], genre_dict: Dict[str, List
         "path": """["videos", """ + dumps(video_id) + """, "storyArt","_1920x1080", "png"]"""}
     response = post(netflix.url, json=data, headers=netflix.headers).json()
     storyArts = response['jsonGraph']['videos']
-    print(response)
+
     for video_id, video in objects.items():
       if not 'title' in video or not video['title'] or not 'value' in video['title'] or not video['title']['value']:
         continue
