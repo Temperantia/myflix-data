@@ -20,6 +20,7 @@ def fetch_video(id: str, shows_with_summary):
             'summary': summary,
         }
   except:
+    return
     print('error ' + id)
 
 # Summaries are the only way known to identify proper titles, ids need to be individually fetched

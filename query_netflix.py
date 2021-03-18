@@ -146,7 +146,7 @@ def get_videos(videos: Dict[str, str]):
 
   videos.update(file.read_json('data/video_summary.json'))
   if REFRESH_IDS:
-    videos = videos.update(get_summary())
+    videos.update(get_summary())
 
   show_count = 0
   movie_count = 0
