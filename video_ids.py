@@ -81,7 +81,7 @@ def get_ids():
       id_list.append([])
     id_list[-1].append(id)
     count += 1
-  if len(videos_cleaned) > 1:
+  if len(id_list) > 1:
     id_list[-1] = [id_list[-1], videos_cleaned, videos]
   threads.threads(get_titles, id_list, 0.02, 'Purging ids')
   print('Collected ' + str(len(videos_cleaned)) + ' titles and trailers')
