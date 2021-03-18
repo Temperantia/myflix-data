@@ -10,7 +10,7 @@ import routine_stats
 
 from utils import firebase, threads, file
 
-QUERY_NETFLIX = False  # 40 minutes
+QUERY_NETFLIX = True  # 40 minutes
 QUERY_NETFLIX_MEDIA_CENTER = False  # 10 minutes # TODO BUG
 QUERY_IMDB = False
 QUERY_YOUTUBE = False
