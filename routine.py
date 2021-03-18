@@ -39,6 +39,7 @@ videos: Dict[str, Any] = {}
 
 if QUERY_NETFLIX:
   query_netflix.get_videos(videos)
+  print('Queried Netflix')
   a = {}
   for id in videos:
     video = videos[id]

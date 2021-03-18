@@ -61,7 +61,7 @@ def create_route(title: str, type: str, id: int) -> str:
   return route
 
 
-def find_categories(genres: Dict[str, str]):
+def find_categories(genres: List[str]):
   categories: List[str] = []
   for genre in genres:
     found = genre_dict[genre]
@@ -142,7 +142,7 @@ def fetch_video(video_id: str, shows: Dict[str, Any], genre_dict: Dict[str, str]
 
 
 def get_videos(videos):
-  genre_dict = file.read_json('data/genres.json')
+  #genre_dict = file.read_json('data/genres.json')
 
   videos.update(file.read_json('data/video_summary.json'))
   if REFRESH_IDS:
