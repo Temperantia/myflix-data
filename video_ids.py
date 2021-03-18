@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List
 from requests import post
 from json import dumps
 
@@ -42,6 +42,7 @@ def get_titles(index: List[List[int]], videos_cleaned: Dict[str, Any], videos: D
       if 'value' in video['parent'] and isinstance(video['parent']['value'], list) and len(video['parent']['value']) == 2 and video['parent']['value'][1] == video_id:
         videos_cleaned[video_id] = videos[video_id]
   except Exception as e:
+    return
     print(e)
     print(index[0])
 
@@ -65,8 +66,6 @@ def get_ids():
   threads.threads(rangeCollect, args, 0.02, 'Scanning ids')
   print(error)
   print('Collected ' + str(len(videos)) + ' ids')
-  # with open('data/video_ids.json', 'w', encoding='utf-8') as outfile:
-  #  dump(videos, outfile, ensure_ascii=False)
 
   videos_cleaned = file.read_json('data/video_cleaned.json')
   count = 0
