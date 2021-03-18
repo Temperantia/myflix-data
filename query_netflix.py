@@ -15,13 +15,18 @@ types: Dict[str, str] = {}
 title_ids: Dict[int, int] = {}
 
 f: Dict[str, Dict[str, str]] = file.read_json('data/genres_tagged.json')
-genre_dict: Dict[str, List[str]] = {}
+genre_dict: Dict[str, str] = {}
+for category in f:
+  for genre_id in f[category]:
+    genre_dict[genre_id] = f[category][genre_id]
+
+category_dict: Dict[str, List[str]] = {}
 for category in f:
   for genre_id in f[category]:
     genre = f[category][genre_id]
-    if not genre in genre_dict:
-      genre_dict[genre] = []
-    genre_dict[genre].append(category)
+    if not genre in category_dict:
+      category_dict[genre] = []
+    category_dict[genre].append(category)
 
 
 def list_until_empty(data: Dict[str, Any], k: Optional[str] = None) -> List[str]:
@@ -39,11 +44,8 @@ def list_until_empty(data: Dict[str, Any], k: Optional[str] = None) -> List[str]
   return l
 
 
-def find_genre_name(genre_id: str, genre_dict: Dict[str, List[str]]) -> List[str]:
-  for genre in genre_dict:
-    if genre == genre_id:
-      return genre_dict[genre]
-  return []
+def find_genre_name(genre_id: str) -> List[str]:
+  return genre_dict[genre_id]
 
 
 def create_route(title: str, type: str, id: int) -> str:
@@ -64,14 +66,16 @@ def create_route(title: str, type: str, id: int) -> str:
 def find_categories(genres: List[str]):
   categories: List[str] = []
   for genre in genres:
-    found = genre_dict[genre]
+    if not genre in category_dict:
+      continue
+    found = category_dict[genre]
     for category in found:
       if not category in categories:
         categories.append(category)
   return categories
 
 
-def fetch_video(video_id: str, shows: Dict[str, Any], genre_dict: Dict[str, List[str]]):
+def fetch_video(video_id: str, shows: Dict[str, Any]):
   data = {
       "path": """["videos", """ + dumps(video_id) + """, ["title", "synopsis", "seasonCount", "episodeCount", "releaseYear", "maturity", "availability", "genres", "moodTags", "creators", "directors", "writers", "cast"],{"from":0,"to":3},["name"] ]"""}
   try:
@@ -102,8 +106,7 @@ def fetch_video(video_id: str, shows: Dict[str, Any], genre_dict: Dict[str, List
       availability = video['availability']['value'] if 'availability' in video else None
       g: List[Any] = list_until_empty(
           video['genres']) if 'genres' in video else []
-      genres: List[str] = [find_genre_name(
-          genre[1], genre_dict) for genre in g]
+      genres: List[str] = [find_genre_name(genre[1]) for genre in g]
       moodTags = list_until_empty(
           video['moodTags'], 'name') if 'moodTags' in video else []
       creators = list_until_empty(
@@ -142,8 +145,6 @@ def fetch_video(video_id: str, shows: Dict[str, Any], genre_dict: Dict[str, List
 
 
 def get_videos(videos: Dict[str, str]):
-  #genre_dict = file.read_json('data/genres.json')
-
   videos.update(file.read_json('data/video_summary.json'))
   if REFRESH_IDS:
     videos.update(get_summary())
@@ -164,7 +165,7 @@ def get_videos(videos: Dict[str, str]):
     id_list[-1].append(id)
     count += 1
 
-  args = [[id, videos, genre_dict] for id in id_list]
+  args = [[id, videos] for id in id_list]
   threads.threads(fetch_video, args, 0.02, 'Fetching titles')
 
   print('Collected ' + str(show_count) +
