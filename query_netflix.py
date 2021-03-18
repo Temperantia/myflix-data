@@ -24,7 +24,7 @@ for category in f:
     genre_dict[genre].append(category)
 
 
-def list_until_empty(data: Dict[str, Any], k: Optional[str] = None):
+def list_until_empty(data: Dict[str, Any], k: Optional[str] = None) -> List[str]:
   l: List[str] = []
   for key in data:
     obj = data[key]
@@ -39,7 +39,7 @@ def list_until_empty(data: Dict[str, Any], k: Optional[str] = None):
   return l
 
 
-def find_genre_name(genre_id: str, genre_dict: Dict[str, List[str]]):
+def find_genre_name(genre_id: str, genre_dict: Dict[str, List[str]]) -> List[str]:
   for genre in genre_dict:
     if genre == genre_id:
       return genre_dict[genre]
@@ -58,6 +58,7 @@ def create_route(title: str, type: str, id: int) -> str:
       title_ids[id] += 1
     route = create_route(title, type, title_ids[id] + 1)
   types[route] = type
+  print(types)
   return route
 
 
@@ -77,8 +78,7 @@ def fetch_video(video_id: str, shows: Dict[str, Any], genre_dict: Dict[str, List
   try:
     response = post(netflix.url, json=data, headers=netflix.headers).json()
     objects = response['jsonGraph']['videos']
-    people = response['jsonGraph']['person'] if 'person' in response['jsonGraph'] else [
-    ]
+    people: Dict[str, Any] = response['jsonGraph']['person'] if 'person' in response['jsonGraph'] else {}
     data = {
         "path": """["videos", """ + dumps(video_id) + """, "boxarts","_1920x1080", "png"]"""}
     response = post(netflix.url, json=data, headers=netflix.headers).json()
@@ -101,9 +101,10 @@ def fetch_video(video_id: str, shows: Dict[str, Any], genre_dict: Dict[str, List
       releaseYear = video['releaseYear']['value'] if 'releaseYear' in video else None
       maturity = video['maturity']['value']['rating']['value'] if 'maturity' in video and 'value' in video['maturity']['value']['rating'] else None
       availability = video['availability']['value'] if 'availability' in video else None
-      genres: List[str] = list_until_empty(
+      g: List[Any] = list_until_empty(
           video['genres']) if 'genres' in video else []
-      genres = [find_genre_name(genre[1], genre_dict) for genre in genres]
+      genres: List[str] = [find_genre_name(
+          genre[1], genre_dict) for genre in g]
       moodTags = list_until_empty(
           video['moodTags'], 'name') if 'moodTags' in video else []
       creators = list_until_empty(
@@ -151,7 +152,7 @@ def get_videos(videos: Dict[str, str]):
   show_count = 0
   movie_count = 0
   count = 0
-  id_list = []
+  id_list: List[List[str]] = []
   for id in videos:
     if not 'summary' in videos[id]:
       continue
