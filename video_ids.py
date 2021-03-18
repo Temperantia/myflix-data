@@ -26,6 +26,7 @@ def rangeCollect(index: int, rng: int, videos: Dict[str, Any]):
         if value:
           videos[video_id] = {'title': value}
   except Exception as e:
+    return
     print(e)
     print('error ' + str(index))
 
