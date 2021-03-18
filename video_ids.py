@@ -17,7 +17,6 @@ def rangeCollect(index: int, rng: int, videos: Dict[str, Any]):
     response = post(netflix.url, json=data, headers=netflix.headers)
     response = response.json()
     objects = response['jsonGraph']['videos']
-    print(objects)
     for video_id in objects:
       video = objects[video_id]
       if '$type' in video['title'] and video['title']['$type'] == 'error':
