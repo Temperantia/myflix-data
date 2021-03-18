@@ -1,4 +1,4 @@
-from typing import Any, List, Tuple
+from typing import Any, Dict, List, Tuple
 from requests import post
 from json import dumps
 
@@ -8,7 +8,7 @@ from key import netflix
 error = 0
 
 
-def rangeCollect(index: int, rng: int, videos):
+def rangeCollect(index: int, rng: int, videos: Dict[str, Any]):
   global error
   ids = [str(i) for i in range(index, index + rng)]
   data = {
@@ -34,7 +34,7 @@ def rangeCollect(index: int, rng: int, videos):
 
 
 # Ensures the ids are their own parent meaning they are proper titles or episodes
-def get_titles(index, videos_cleaned, videos):
+def get_titles(index: List[List[int]], videos_cleaned: Dict[str, Any], videos: Dict[str, Any]):
   data = {
       "path": '["videos", ' + dumps(index) + ', "parent"]'}
   try:
@@ -49,25 +49,21 @@ def get_titles(index, videos_cleaned, videos):
 
 
 def get_ids():
-  videos = {}.fromkeys(['28369403',
-                        '28630857',
-                        '28631029',
-                        '28631995',
-                        '28634944'], {}).update(file.read_json('data/video_ids.json'))
-  args: List[Tuple[int, int, Any]] = []
+  videos = file.read_json('data/video_ids.json')
+  args: List[List[Any]] = []
   # 60 000 000 to 82 000 000
   for i in range(5):  # 60_037_677
     index = 60_000_000 + i * 8000
-    args.append((index, 8000, videos))
+    args.append([index, 8000, videos])
   for i in range(39):  # 70_309_703
     index = 70_000_000 + i * 8000
-    args.append((index, 8000, videos))
+    args.append([index, 8000, videos])
   for i in range(496):  # 80 240 263
     index = 80_000_000 + i * 500
-    args.append((index, 500, videos))
+    args.append([index, 500, videos])
   for i in range(3040):  # 80_986_788 - 81 290 762 = 303,974
     index = 80_986_788 + i * 100
-    args.append((index, 100, videos))
+    args.append([index, 100, videos])
   args = [args[0]]
   threads.threads(rangeCollect, args, 0.02, 'Scanning ids')
   print(error)
@@ -90,6 +86,3 @@ def get_ids():
   print('Collected ' + str(len(videos_cleaned)) + ' titles and trailers')
   file.write_json('data/video_cleaned.json', videos_cleaned)
   return videos_cleaned
-
-if __name__ == '__main__':
-  get_ids()
