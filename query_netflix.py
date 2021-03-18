@@ -9,7 +9,7 @@ from utils import threads, file
 from key import netflix
 from video_summary import get_summary
 
-REFRESH_IDS = False
+REFRESH_IDS = True
 
 types: Dict[str, str] = {}
 title_ids: Dict[int, int] = {}
@@ -76,7 +76,6 @@ def fetch_video(video_id: str, shows: Dict[str, Any], genre_dict: Dict[str, List
       "path": """["videos", """ + dumps(video_id) + """, ["title", "synopsis", "seasonCount", "episodeCount", "releaseYear", "maturity", "availability", "genres", "moodTags", "creators", "directors", "writers", "cast"],{"from":0,"to":3},["name"] ]"""}
   try:
     response = post(netflix.url, json=data, headers=netflix.headers).json()
-    print(response)
     objects = response['jsonGraph']['videos']
     people: Dict[str, Any] = response['jsonGraph']['person'] if 'person' in response['jsonGraph'] else {}
     data = {

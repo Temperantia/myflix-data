@@ -1,5 +1,5 @@
 from typing import Any, Dict
-from random import randint, uniform
+from random import randint
 from datetime import datetime
 
 import query_netflix
@@ -16,7 +16,6 @@ QUERY_IMDB = False
 QUERY_YOUTUBE = False
 SCRAPE_IMDB = False  # ?
 CALCULATE_STATS = True
-UPDATE_FIRESTORE = True
 SEED_FIRESTORE = False
 
 dt = datetime.now()
