@@ -15,8 +15,9 @@ def rangeCollect(index: int, rng: int, videos):
       "path": """["videos", """ + dumps(ids) + """, "title"]"""}
   try:
     response = post(netflix.url, json=data, headers=netflix.headers)
-    response = response.json()
     print(response)
+
+    response = response.json()
     objects = response['jsonGraph']['videos']
     for video_id in objects:
       video = objects[video_id]
