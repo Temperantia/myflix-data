@@ -27,7 +27,7 @@ def rangeCollect(index: int, rng: int, videos: Dict[str, Any]):
 
 
 # Ensures the ids are their own parent meaning they are proper titles or episodes
-def get_titles(index: List[List[int]], videos: Dict[str, Any]):
+def get_titles(index: List[List[int]], videos: Dict[str, Any], videos_cleaned: Dict[str, Any]):
   data = {
       "path": '["videos", ' + dumps(index) + ', "parent"]'}
   try:
@@ -35,7 +35,7 @@ def get_titles(index: List[List[int]], videos: Dict[str, Any]):
     objects = response['jsonGraph']['videos']
     for (video_id, video) in objects.items():
       if 'value' in video['parent'] and isinstance(video['parent']['value'], list) and len(video['parent']['value']) == 2 and video['parent']['value'][1] == video_id:
-        videos[video_id] = videos[video_id]
+        videos_cleaned[video_id] = videos[video_id]
   except Exception as e:
     print(e)
     print(index[0])
@@ -66,12 +66,12 @@ def get_ids():
   for id in videos:
     if count % 150 == 0:
       if count != 0:
-        id_list[-1] = [id_list[-1], video_cleaned]
+        id_list[-1] = [id_list[-1], videos, video_cleaned]
       id_list.append([])
     id_list[-1].append(id)
     count += 1
 
-  id_list[-1] = [id_list[-1], video_cleaned]
+  id_list[-1] = [id_list[-1], videos, video_cleaned]
   threads.threads(get_titles, id_list, 0.02, 'Purging ids')
   print('Collected ' + str(len(video_cleaned)) + ' titles and trailers')
   file.write_json('data/video_ids.json', video_cleaned)
