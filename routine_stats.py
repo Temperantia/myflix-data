@@ -67,7 +67,7 @@ def upload(video_id: str, video: Dict[str, Any]):
       'rank': rank[video_id],
       'popularity': popularity[video_id],
   })
-  #firebase.video_collection.document(video_id).set(video, merge=True)
+  firebase.video_collection.document(video_id).set(video, merge=True)
 
 
 def get_video_stats(videos: Dict[str, Any]):
@@ -110,9 +110,9 @@ def get_video_stats(videos: Dict[str, Any]):
   })
 
   print('Most popular categories')
-  # client.index('categories').delete_all_documents()
-  # client.index('categories').add_documents(sorted(categories.values(),
-  #                                                key=lambda elem: elem['value'], reverse=True)[:3])
+  client.index('categories').delete_all_documents()
+  client.index('categories').add_documents(sorted(categories.values(),
+                                                  key=lambda elem: elem['value'], reverse=True)[:3])
 
   print('Upload')
   threads.threads(upload, [[video_id, video]

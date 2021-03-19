@@ -12,10 +12,10 @@ from utils import firebase, threads, file
 
 QUERY_NETFLIX = True  # 40 minutes
 QUERY_NETFLIX_MEDIA_CENTER = False  # 10 minutes # TODO BUG
-QUERY_IMDB = False
-QUERY_YOUTUBE = False
-SCRAPE_IMDB = False  # ?
-CALCULATE_STATS = False
+QUERY_IMDB = True
+QUERY_YOUTUBE = True
+SCRAPE_IMDB = True  # ?
+CALCULATE_STATS = True
 SEED_FIRESTORE = False
 
 dt = datetime.now()
