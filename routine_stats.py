@@ -118,7 +118,9 @@ def get_video_stats(videos: Dict[str, Any]):
                            for video_id, video in videos.items()], 0, 'Uploading')
   for video_id, video in videos.items():
     if 'categories' in video:
-      print(video['categories'])
+      pass
+    else:
+      print(video)
   return
   print('Updating search tables')
   search = [{
