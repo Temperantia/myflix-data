@@ -31,7 +31,7 @@ def get_titles(index: List[int], videos: Dict[str, Any], videos_cleaned: Dict[st
   data = {
       "path": '["videos", ' + dumps(index) + ', "parent"]'}
   try:
-    response = post(netflix.url, json=data, headers=netflix.headers).json()
+    response = post(netflix.url, json=data, headers=netflix.headers, timeout=10).json()
     print(response)
     objects = response['jsonGraph']['videos']
     for (video_id, video) in objects.items():
