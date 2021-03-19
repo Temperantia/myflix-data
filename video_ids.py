@@ -73,7 +73,8 @@ def get_ids():
     id_list[-1].append(id)
     count += 1
 
-  id_list[-1] = [id_list[-1], videos, video_cleaned]
+  if len(id_list) > 1:
+    id_list[-1] = [id_list[-1], videos, video_cleaned]
   threads.threads(get_titles, id_list, 0.02, 'Purging ids')
   print('Collected ' + str(len(video_cleaned)) + ' titles and trailers')
   file.write_json('data/video_ids.json', video_cleaned)
