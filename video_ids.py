@@ -37,7 +37,6 @@ def get_titles(index: List[List[int]], videos: Dict[str, Any]):
       if 'value' in video['parent'] and isinstance(video['parent']['value'], list) and len(video['parent']['value']) == 2 and video['parent']['value'][1] == video_id:
         videos[video_id] = videos[video_id]
   except Exception as e:
-    return
     print(e)
     print(index[0])
 
@@ -61,18 +60,19 @@ def get_ids():
   threads.threads(rangeCollect, args, 0.02, 'Scanning ids')
   print('Collected ' + str(len(videos)) + ' ids')
 
+  video_cleaned = {}
   count = 0
   id_list = []
   for id in videos:
     if count % 150 == 0:
       if count != 0:
-        id_list[-1] = [id_list[-1], videos]
+        id_list[-1] = [id_list[-1], video_cleaned]
       id_list.append([])
     id_list[-1].append(id)
     count += 1
 
-  id_list[-1] = [id_list[-1], videos]
+  id_list[-1] = [id_list[-1], video_cleaned]
   threads.threads(get_titles, id_list, 0.02, 'Purging ids')
-  print('Collected ' + str(len(videos)) + ' titles and trailers')
-  file.write_json('data/video_ids.json', videos)
-  return videos
+  print('Collected ' + str(len(video_cleaned)) + ' titles and trailers')
+  file.write_json('data/video_ids.json', video_cleaned)
+  return video_cleaned
