@@ -9,7 +9,7 @@ from video_ids import get_ids
 
 def fetch_video(id: str, shows_with_summary: Dict[str, Any]):
   data = {
-      "path": """["videos", """ + id + """, "summary"]"""}
+      "path": """["videos", '""" + id + """', "summary"]"""}
   try:
     response = post(netflix.url, json=data, headers=netflix.headers)
     print(data)
