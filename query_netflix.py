@@ -9,7 +9,7 @@ from utils import threads, file
 from key import netflix
 from video_summary import get_summary
 
-REFRESH_IDS = True
+REFRESH_IDS = False
 
 types: Dict[str, str] = {}
 title_ids: Dict[int, int] = {}
@@ -165,7 +165,7 @@ def get_videos(videos: Dict[str, Any]):
     count += 1
 
   args = [[id, videos] for id in id_list]
-  threads.threads(fetch_video, args, 0.5, 'Fetching titles')
+  threads.threads(fetch_video, args, 1, 'Fetching titles')
 
   print('Collected ' + str(show_count) +
         ' shows and ' + str(movie_count) + ' movies')
