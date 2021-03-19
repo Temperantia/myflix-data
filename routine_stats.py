@@ -52,12 +52,13 @@ def get_video_stat(video_id: str, video: Dict[str, Any]):
   scores[video_id] = video['score'] if 'score' in video and video['score'] else 0
   bingeworthiness[video_id] = len(video['bingeworthiness']) / \
       2 if 'bingeworthiness' in video and video['bingeworthiness'] else 0
-  for category in video['categories']:
-    if category in categories:
-      categories[category]['value'] += 1
-    else:
-      categories[category] = {'category': category,
-                              'value': 1, 'image': video['boxArt']}
+  if 'categories' in video:
+    for category in video['categories']:
+      if category in categories:
+        categories[category]['value'] += 1
+      else:
+        categories[category] = {'category': category,
+                                'value': 1, 'image': video['boxArt']}
 
 
 def upload(video_id: str, video: Dict[str, Any]):
@@ -109,9 +110,9 @@ def get_video_stats(videos: Dict[str, Any]):
   })
 
   print('Most popular categories')
-  client.index('categories').delete_all_documents()
-  client.index('categories').add_documents(sorted(categories.values(),
-                                                  key=lambda elem: elem['value'], reverse=True)[:3])
+  # client.index('categories').delete_all_documents()
+  # client.index('categories').add_documents(sorted(categories.values(),
+  #                                                key=lambda elem: elem['value'], reverse=True)[:3])
 
   print('Upload')
   threads.threads(upload, [[video_id, video]
@@ -144,6 +145,6 @@ def get_video_stats(videos: Dict[str, Any]):
       'j': trending[video['title']] if video['title'] in trending else None,
       's': video['seasonCount'] if video['seasonCount'] else None,
       'e': video['episodeCount'] if video['episodeCount'] else None,
-  } for video_id, video in videos.items()]
+  } for video_id, video in videos.items() if 'route' in video]
 
   client.index('videos').update_documents(search)

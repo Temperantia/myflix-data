@@ -1,9 +1,10 @@
+from typing import Any, Dict
 import imdb
 
 db = imdb.IMDb(accessSystem='https', reraiseExceptions=True)
 
 
-def get_imdb_data(video):
+def get_imdb_data(video: Dict[str, Any]):
   obj = {}
 
   try:

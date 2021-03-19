@@ -40,7 +40,7 @@ if QUERY_NETFLIX:
   query_netflix.get_videos(videos)
   print('Queried Netflix')
 
-videos.update(file.read_json('data/videos.json'))
+#videos.update(file.read_json('data/videos.json'))
 args = [[video_id, video] for video_id, video in videos.items()]
 threads.threads(get_video, args, 0, 'Getting videos')
 file.write_json('data/videos.json', videos)

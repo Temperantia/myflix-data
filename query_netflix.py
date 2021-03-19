@@ -75,19 +75,19 @@ def find_categories(genres: List[str]):
   return categories
 
 
-def fetch_video(video_id: str, shows: Dict[str, Any]):
+def fetch_video(ids: List[str], shows: Dict[str, Any]):
   data = {
-      "path": """["videos", """ + dumps(video_id) + """, ["title", "synopsis", "seasonCount", "episodeCount", "releaseYear", "maturity", "availability", "genres", "moodTags", "creators", "directors", "writers", "cast"],{"from":0,"to":3},["name"] ]"""}
+      "path": """["videos", """ + dumps(ids) + """, ["title", "synopsis", "seasonCount", "episodeCount", "releaseYear", "maturity", "availability", "genres", "moodTags", "creators", "directors", "writers", "cast"],{"from":0,"to":3},["name"] ]"""}
   # try:
   response = post(netflix.url, json=data, headers=netflix.headers).json()
   objects = response['jsonGraph']['videos']
   people: Dict[str, Any] = response['jsonGraph']['person'] if 'person' in response['jsonGraph'] else {}
   data = {
-      "path": """["videos", """ + dumps(video_id) + """, "boxarts","_1920x1080", "png"]"""}
+      "path": """["videos", """ + dumps(ids) + """, "boxarts","_1920x1080", "png"]"""}
   response = post(netflix.url, json=data, headers=netflix.headers).json()
   boxArts = response['jsonGraph']['videos']
   data = {
-      "path": """["videos", """ + dumps(video_id) + """, "storyArt","_1920x1080", "png"]"""}
+      "path": """["videos", """ + dumps(ids) + """, "storyArt","_1920x1080", "png"]"""}
   response = post(netflix.url, json=data, headers=netflix.headers).json()
   storyArts = response['jsonGraph']['videos']
 

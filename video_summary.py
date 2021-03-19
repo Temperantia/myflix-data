@@ -28,7 +28,7 @@ def fetch_video(id: str, shows_with_summary: Dict[str, Any]):
 # Summaries are the only way known to identify proper titles, ids need to be individually fetched
 
 
-def get_summary():
+def get_summary() -> Dict[str, Any]:
   shows_with_summary = {}  # file.read_json('data/video_summary.json')
   args = [[id, shows_with_summary] for id in get_ids()]
   threads.threads(fetch_video, args, 0.02, 'Fetching summaries')

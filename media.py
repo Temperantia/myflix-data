@@ -1,7 +1,8 @@
+from typing import Any, Dict
 from requests import post
 
 
-def request_media(id, video):
+def request_media(id: str, video: Dict[str, Any]):
   title = {}
   data = {
       'operationName': 'getOriginalHook',
