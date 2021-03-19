@@ -11,7 +11,10 @@ def fetch_video(id: str, shows_with_summary: Dict[str, Any]):
   data = {
       "path": """["videos", """ + id + """, "summary"]"""}
   try:
-    response = post(netflix.url, json=data, headers=netflix.headers).json()
+    response = post(netflix.url, json=data, headers=netflix.headers)
+    print(data)
+    print(response)
+    response = response.json()
     objects = response['jsonGraph']['videos']
     for video_id in objects:
       video = objects[video_id]
@@ -31,7 +34,7 @@ def fetch_video(id: str, shows_with_summary: Dict[str, Any]):
 
 
 def get_summary() -> Dict[str, Any]:
-  shows_with_summary =  file.read_json('data/video_summary.json')
+  shows_with_summary = file.read_json('data/video_summary.json')
   args = [[id, shows_with_summary] for id in get_ids()]
   threads.threads(fetch_video, args, 0.02, 'Fetching summaries')
   print('Collected ' + str(len(shows_with_summary)) + ' shows and movies')
