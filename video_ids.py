@@ -49,16 +49,16 @@ def get_ids():
   for i in range(5):  # range(5):  # 60_037_677
     index = 60_000_000 + i * 8000
     args.append([index, 8000, videos])
-  # for i in range(39):  # 70_309_703
-  #  index = 70_000_000 + i * 8000
-  #  args.append([index, 8000, videos])
-  # for i in range(496):  # 80 240 263
-  #  index = 80_000_000 + i * 500
-  #  args.append([index, 500, videos])
-  # for i in range(3040):  # 80_986_788 - 81 290 762 = 303,974
-  #  index = 80_986_788 + i * 100
-  #  args.append([index, 100, videos])
-  threads.threads(rangeCollect, args, 0.5, 'Scanning ids')
+  for i in range(39):  # 70_309_703
+    index = 70_000_000 + i * 8000
+    args.append([index, 8000, videos])
+  for i in range(496):  # 80 240 263
+    index = 80_000_000 + i * 500
+    args.append([index, 500, videos])
+  for i in range(3040):  # 80_986_788 - 81 290 762 = 303,974
+    index = 80_986_788 + i * 100
+    args.append([index, 100, videos])
+  threads.threads(rangeCollect, args, 0.02, 'Scanning ids')
   print('Collected ' + str(len(videos)) + ' ids')
 
   videos_cleaned = {}  # file.read_json('data/video_cleaned.json')
