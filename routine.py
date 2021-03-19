@@ -39,12 +39,6 @@ videos: Dict[str, Any] = {}
 if QUERY_NETFLIX:
   query_netflix.get_videos(videos)
   print('Queried Netflix')
-  a = {}
-  for id in videos:
-    video = videos[id]
-    if 'title' in video:
-      a[id] = video
-  videos = a
 
 videos.update(file.read_json('data/videos.json'))
 args = [[video_id, video] for video_id, video in videos.items()]

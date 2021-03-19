@@ -27,7 +27,7 @@ def fetch_video(id: str, shows_with_summary):
 
 
 def get_summary():
-  shows_with_summary = file.read_json('data/video_summary.json')
+  shows_with_summary = {}#file.read_json('data/video_summary.json')
   args = [[id, shows_with_summary] for id in get_ids()]
   threads.threads(fetch_video, args, 0.02, 'Fetching summaries')
   print('Collected ' + str(len(shows_with_summary)) + ' shows and movies')

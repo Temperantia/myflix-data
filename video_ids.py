@@ -48,26 +48,26 @@ def get_titles(index: List[List[int]], videos_cleaned: Dict[str, Any], videos: D
 
 
 def get_ids():
-  videos = file.read_json('data/video_ids.json')
+  videos = {}  # file.read_json('data/video_ids.json')
   args: List[List[Any]] = []
   # 60 000 000 to 82 000 000
-  for i in range(1): # range(5):  # 60_037_677
+  for i in range(1):  # range(5):  # 60_037_677
     index = 60_000_000 + i * 8000
     args.append([index, 8000, videos])
-  #for i in range(39):  # 70_309_703
+  # for i in range(39):  # 70_309_703
   #  index = 70_000_000 + i * 8000
   #  args.append([index, 8000, videos])
-  #for i in range(496):  # 80 240 263
+  # for i in range(496):  # 80 240 263
   #  index = 80_000_000 + i * 500
   #  args.append([index, 500, videos])
-  #for i in range(3040):  # 80_986_788 - 81 290 762 = 303,974
+  # for i in range(3040):  # 80_986_788 - 81 290 762 = 303,974
   #  index = 80_986_788 + i * 100
   #  args.append([index, 100, videos])
   threads.threads(rangeCollect, args, 0.02, 'Scanning ids')
   print(error)
   print('Collected ' + str(len(videos)) + ' ids')
 
-  videos_cleaned = file.read_json('data/video_cleaned.json')
+  videos_cleaned = {}  # file.read_json('data/video_cleaned.json')
   count = 0
   id_list = []
   for id in videos:
@@ -77,7 +77,7 @@ def get_ids():
       id_list.append([])
     id_list[-1].append(id)
     count += 1
-   
+
   id_list[-1] = [id_list[-1], videos_cleaned, videos]
   threads.threads(get_titles, id_list, 0.02, 'Purging ids')
   print('Collected ' + str(len(videos_cleaned)) + ' titles and trailers')
