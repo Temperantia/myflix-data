@@ -27,7 +27,7 @@ def rangeCollect(index: int, rng: int, videos: Dict[str, Any]):
 
 
 # Ensures the ids are their own parent meaning they are proper titles or episodes
-def get_titles(index: List[List[int]], videos_cleaned: Dict[str, Any], videos: Dict[str, Any]):
+def get_titles(index: List[List[int]], videos: Dict[str, Any]):
   data = {
       "path": '["videos", ' + dumps(index) + ', "parent"]'}
   try:
@@ -35,7 +35,7 @@ def get_titles(index: List[List[int]], videos_cleaned: Dict[str, Any], videos: D
     objects = response['jsonGraph']['videos']
     for (video_id, video) in objects.items():
       if 'value' in video['parent'] and isinstance(video['parent']['value'], list) and len(video['parent']['value']) == 2 and video['parent']['value'][1] == video_id:
-        videos_cleaned[video_id] = videos[video_id]
+        videos[video_id] = videos[video_id]
   except Exception as e:
     return
     print(e)
@@ -43,7 +43,7 @@ def get_titles(index: List[List[int]], videos_cleaned: Dict[str, Any], videos: D
 
 
 def get_ids():
-  videos = {}
+  videos = file.read_json('data/video_ids.json')
   args: List[List[Any]] = []
   # 60 000 000 to 82 000 000
   for i in range(5):  # range(5):  # 60_037_677
@@ -61,19 +61,18 @@ def get_ids():
   threads.threads(rangeCollect, args, 0.02, 'Scanning ids')
   print('Collected ' + str(len(videos)) + ' ids')
 
-  videos_cleaned = file.read_json('data/video_ids.json')
   count = 0
   id_list = []
   for id in videos:
     if count % 150 == 0:
       if count != 0:
-        id_list[-1] = [id_list[-1], videos_cleaned, videos]
+        id_list[-1] = [id_list[-1], videos]
       id_list.append([])
     id_list[-1].append(id)
     count += 1
 
-  id_list[-1] = [id_list[-1], videos_cleaned, videos]
+  id_list[-1] = [id_list[-1], videos]
   threads.threads(get_titles, id_list, 0.02, 'Purging ids')
-  print('Collected ' + str(len(videos_cleaned)) + ' titles and trailers')
-  file.write_json('data/video_ids.json', videos_cleaned)
-  return videos_cleaned
+  print('Collected ' + str(len(videos)) + ' titles and trailers')
+  file.write_json('data/video_ids.json', videos)
+  return videos
