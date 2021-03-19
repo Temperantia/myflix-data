@@ -42,7 +42,7 @@ def get_titles(index: List[List[int]], videos: Dict[str, Any], videos_cleaned: D
 
 
 def get_ids():
-  videos = file.read_json('data/video_ids.json')
+  videos = {}
   args: List[List[Any]] = []
   # 60 000 000 to 82 000 000
   for i in range(5):  # range(5):  # 60_037_677
@@ -60,7 +60,7 @@ def get_ids():
   threads.threads(rangeCollect, args, 0.02, 'Scanning ids')
   print('Collected ' + str(len(videos)) + ' ids')
 
-  video_cleaned = {}
+  video_cleaned = file.read_json('data/video_ids.json')
   count = 0
   id_list = []
   for id in videos:
