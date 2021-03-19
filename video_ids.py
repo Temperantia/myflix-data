@@ -27,16 +27,18 @@ def rangeCollect(index: int, rng: int, videos: Dict[str, Any]):
 
 
 # Ensures the ids are their own parent meaning they are proper titles or episodes
-def get_titles(index: List[List[int]], videos: Dict[str, Any], videos_cleaned: Dict[str, Any]):
+def get_titles(index: List[int], videos: Dict[str, Any], videos_cleaned: Dict[str, Any]):
   data = {
       "path": '["videos", ' + dumps(index) + ', "parent"]'}
   try:
     response = post(netflix.url, json=data, headers=netflix.headers).json()
+    print(response)
     objects = response['jsonGraph']['videos']
     for (video_id, video) in objects.items():
       if 'value' in video['parent'] and isinstance(video['parent']['value'], list) and len(video['parent']['value']) == 2 and video['parent']['value'][1] == video_id:
         videos_cleaned[video_id] = videos[video_id]
   except Exception as e:
+    return
     print(e)
     print(index[0])
 
