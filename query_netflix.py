@@ -9,7 +9,7 @@ from utils import threads, file
 from key import netflix
 from video_summary import get_summary
 
-REFRESH_IDS = False
+REFRESH_IDS = True
 
 types: Dict[str, str] = {}
 title_ids: Dict[int, int] = {}
