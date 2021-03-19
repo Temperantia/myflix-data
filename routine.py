@@ -15,7 +15,7 @@ QUERY_NETFLIX_MEDIA_CENTER = False  # 10 minutes # TODO BUG
 QUERY_IMDB = False
 QUERY_YOUTUBE = False
 SCRAPE_IMDB = False  # ?
-CALCULATE_STATS = False
+CALCULATE_STATS = True
 SEED_FIRESTORE = False
 
 dt = datetime.now()

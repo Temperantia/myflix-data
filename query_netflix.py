@@ -166,7 +166,6 @@ def get_videos(videos: Dict[str, Any]):
 
   args = [[id, videos] for id in id_list]
   threads.threads(fetch_video, args, 0.5, 'Fetching titles')
-  print(videos)
 
   print('Collected ' + str(show_count) +
         ' shows and ' + str(movie_count) + ' movies')

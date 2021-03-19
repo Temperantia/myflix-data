@@ -60,7 +60,7 @@ def get_video_stat(video_id: str, video: Dict[str, Any]):
                               'value': 1, 'image': video['boxArt']}
 
 
-def upload(video_id: str, video):
+def upload(video_id: str, video: Dict[str, Any]):
   global rank, popularity
   video.update({
       'rank': rank[video_id],
