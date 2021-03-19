@@ -59,7 +59,7 @@ def get_ids():
   for i in range(3040):  # 80_986_788 - 81 290 762 = 303,974
     index = 80_986_788 + i * 100
     args.append([index, 100, videos])
-  threads.threads(rangeCollect, args, 0.02, 'Scanning ids')
+  threads.threads(rangeCollect, args, 0.1, 'Scanning ids')
   print('Collected ' + str(len(videos)) + ' ids')
 
   video_cleaned = file.read_json('data/video_ids.json')
@@ -75,7 +75,7 @@ def get_ids():
 
   if len(id_list) > 1:
     id_list[-1] = [id_list[-1], videos, video_cleaned]
-  threads.threads(get_titles, id_list, 0.02, 'Purging ids')
+  threads.threads(get_titles, id_list, 0.1, 'Purging ids')
   print('Collected ' + str(len(video_cleaned)) + ' titles and trailers')
   file.write_json('data/video_ids.json', video_cleaned)
   return video_cleaned
