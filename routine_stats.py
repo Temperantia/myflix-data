@@ -109,19 +109,13 @@ def get_video_stats(videos: Dict[str, Any]):
   })
 
   print('Most popular categories')
-  #client.index('categories').delete_all_documents()
-  #client.index('categories').add_documents(sorted(categories.values(),
-   #                                               key=lambda elem: elem['value'], reverse=True)[:3])
+  client.index('categories').delete_all_documents()
+  client.index('categories').add_documents(sorted(categories.values(),
+                                                  key=lambda elem: elem['value'], reverse=True)[:3])
 
   print('Upload')
   threads.threads(upload, [[video_id, video]
                            for video_id, video in videos.items()], 0, 'Uploading')
-  for video_id, video in videos.items():
-    if 'categories' in video:
-      pass
-    else:
-      print(video)
-  return
   print('Updating search tables')
   search = [{
       'id': video_id,
@@ -152,4 +146,4 @@ def get_video_stats(videos: Dict[str, Any]):
       'e': video['episodeCount'] if video['episodeCount'] else None,
   } for video_id, video in videos.items()]
 
-  #client.index('videos').update_documents(search)
+  client.index('videos').update_documents(search)
