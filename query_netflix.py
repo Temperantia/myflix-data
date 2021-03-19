@@ -144,11 +144,10 @@ def fetch_video(video_id: str, shows: Dict[str, Any]):
     print(e, video_id)
 
 
-def get_videos(videos: Dict[str, str]):
+def get_videos(videos: Dict[str, Any]):
   #videos.update(file.read_json('data/video_summary.json'))
   if REFRESH_IDS:
     videos.update(get_summary())
-  print(videos)
   show_count = 0
   movie_count = 0
   count = 0
@@ -167,6 +166,7 @@ def get_videos(videos: Dict[str, str]):
 
   args = [[id, videos] for id in id_list]
   threads.threads(fetch_video, args, 0.02, 'Fetching titles')
+  print(videos)
 
   print('Collected ' + str(show_count) +
         ' shows and ' + str(movie_count) + ' movies')

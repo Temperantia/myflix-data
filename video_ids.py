@@ -5,11 +5,8 @@ from json import dumps
 from utils import threads, file
 from key import netflix
 
-error = 0
-
 
 def rangeCollect(index: int, rng: int, videos: Dict[str, Any]):
-  global error
   ids = [str(i) for i in range(index, index + rng)]
   data = {
       "path": """["videos", """ + dumps(ids) + """, "title"]"""}
@@ -19,9 +16,7 @@ def rangeCollect(index: int, rng: int, videos: Dict[str, Any]):
     objects = response['jsonGraph']['videos']
     for video_id in objects:
       video = objects[video_id]
-      if '$type' in video['title'] and video['title']['$type'] == 'error':
-        error += 1
-      elif 'value' in video['title'] and isinstance(video['title']['value'], str):
+      if 'value' in video['title'] and isinstance(video['title']['value'], str):
         value = video['title']['value'].strip()
         if value:
           videos[video_id] = {'title': value}
@@ -63,8 +58,7 @@ def get_ids():
   # for i in range(3040):  # 80_986_788 - 81 290 762 = 303,974
   #  index = 80_986_788 + i * 100
   #  args.append([index, 100, videos])
-  threads.threads(rangeCollect, args, 1, 'Scanning ids')
-  print(error)
+  threads.threads(rangeCollect, args, 0.5, 'Scanning ids')
   print('Collected ' + str(len(videos)) + ' ids')
 
   videos_cleaned = {}  # file.read_json('data/video_cleaned.json')
