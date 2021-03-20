@@ -12,7 +12,7 @@ def rangeCollect(index: int, rng: int, videos: Dict[str, Any]):
       "path": """["videos", """ + dumps(ids) + """, "title"]"""}
   try:
     response = post(netflix.url, json=data, headers=netflix.headers, timeout=10)
-    print(response)
+    print(ids)
     response = response.json()
     objects = response['jsonGraph']['videos']
     for video_id in objects:
@@ -60,7 +60,7 @@ def get_ids():
   for i in range(3040):  # 80_986_788 - 81 290 762 = 303,974
     index = 80_986_788 + i * 100
     args.append([index, 100, videos])
-  threads.threads(rangeCollect, args, 0.1, 'Scanning ids')
+  threads.threads(rangeCollect, args, 1, 'Scanning ids')
   print('Collected ' + str(len(videos)) + ' ids')
 
   video_cleaned = file.read_json('data/video_cleaned.json')
