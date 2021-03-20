@@ -78,70 +78,71 @@ def find_categories(genres: List[str]):
 def fetch_video(ids: List[str], shows: Dict[str, Any]):
   data = {
       "path": """["videos", """ + dumps(ids) + """, ["title", "synopsis", "seasonCount", "episodeCount", "releaseYear", "maturity", "availability", "genres", "moodTags", "creators", "directors", "writers", "cast"],{"from":0,"to":3},["name"] ]"""}
-  # try:
-  response = post(netflix.url, json=data, headers=netflix.headers).json()
-  objects = response['jsonGraph']['videos']
-  people: Dict[str, Any] = response['jsonGraph']['person'] if 'person' in response['jsonGraph'] else {}
-  data = {
-      "path": """["videos", """ + dumps(ids) + """, "boxarts","_1920x1080", "png"]"""}
-  response = post(netflix.url, json=data, headers=netflix.headers).json()
-  boxArts = response['jsonGraph']['videos']
-  data = {
-      "path": """["videos", """ + dumps(ids) + """, "storyArt","_1920x1080", "png"]"""}
-  response = post(netflix.url, json=data, headers=netflix.headers).json()
-  storyArts = response['jsonGraph']['videos']
+  try:
+    response = post(netflix.url, json=data, headers=netflix.headers).json()
+    objects = response['jsonGraph']['videos']
+    people: Dict[str, Any] = response['jsonGraph']['person'] if 'person' in response['jsonGraph'] else {}
+    data = {
+        "path": """["videos", """ + dumps(ids) + """, "boxarts","_1920x1080", "png"]"""}
+    response = post(netflix.url, json=data, headers=netflix.headers).json()
+    boxArts = response['jsonGraph']['videos']
+    data = {
+        "path": """["videos", """ + dumps(ids) + """, "storyArt","_1920x1080", "png"]"""}
+    response = post(netflix.url, json=data, headers=netflix.headers).json()
+    storyArts = response['jsonGraph']['videos']
 
-  for video_id, video in objects.items():
-    if not 'title' in video or not video['title'] or not 'value' in video['title'] or not video['title']['value']:
-      continue
-    title = video['title']['value']
-    boxArt = boxArts[video_id]['boxarts']['_1920x1080']['png']['value']['url']
-    storyArt = storyArts[video_id]['storyArt']['_1920x1080']['png']['value'][
-        'url'] if 'value' in storyArts[video_id]['storyArt']['_1920x1080']['png'] else None
-    synopsis = video['synopsis']['value'] if 'synopsis' in video else None
-    seasonCount = video['seasonCount']['value'] if 'seasonCount' in video else None
-    episodeCount = video['episodeCount']['value'] if 'episodeCount' in video else None
-    releaseYear = video['releaseYear']['value'] if 'releaseYear' in video else None
-    maturity = video['maturity']['value']['rating']['value'] if 'maturity' in video and 'value' in video['maturity']['value']['rating'] else None
-    availability = video['availability']['value'] if 'availability' in video else None
-    g: List[Any] = list_until_empty(
-        video['genres']) if 'genres' in video else []
-    genres: List[str] = [find_genre_name(genre[1]) for genre in g]
-    moodTags = list_until_empty(
-        video['moodTags'], 'name') if 'moodTags' in video else []
-    creators = list_until_empty(
-        video['creators']) if people and 'creators' in video else []
-    creators = [people[id[1]]['name']['value'] for id in creators]
-    directors = list_until_empty(
-        video['directors']) if people and 'directors' in video else []
-    directors = [people[id[1]]['name']['value'] for id in directors]
-    writers = list_until_empty(
-        video['writers']) if people and 'writers' in video else []
-    writers = [people[id[1]]['name']['value'] for id in writers]
-    cast = list_until_empty(
-        video['cast']) if people and 'cast' in video else []
-    cast = [people[id[1]]['name']['value'] for id in cast]
-    shows[video_id].update({
-        'title': title,
-        'synopsis': synopsis,
-        'boxArt': boxArt,
-        'storyArt': storyArt,
-        'seasonCount': seasonCount,
-        'episodeCount': episodeCount,
-        'releaseYear': releaseYear,
-        'maturity': maturity,
-        'availability': availability,
-        'genres': genres,
-        'moodTags': moodTags,
-        'creators': creators,
-        'directors': directors,
-        'writers': writers,
-        'route': create_route(title, shows[video_id]['summary']['type'], 0),
-        'categories': find_categories(genres),
-    })
+    for video_id, video in objects.items():
+      if not 'title' in video or not video['title'] or not 'value' in video['title'] or not video['title']['value']:
+        continue
+      title = video['title']['value']
+      boxArt = boxArts[video_id]['boxarts']['_1920x1080']['png']['value']['url']
+      storyArt = storyArts[video_id]['storyArt']['_1920x1080']['png']['value'][
+          'url'] if 'value' in storyArts[video_id]['storyArt']['_1920x1080']['png'] else None
+      synopsis = video['synopsis']['value'] if 'synopsis' in video else None
+      seasonCount = video['seasonCount']['value'] if 'seasonCount' in video else None
+      episodeCount = video['episodeCount']['value'] if 'episodeCount' in video else None
+      releaseYear = video['releaseYear']['value'] if 'releaseYear' in video else None
+      maturity = video['maturity']['value']['rating']['value'] if 'maturity' in video and 'value' in video['maturity']['value']['rating'] else None
+      availability = video['availability']['value'] if 'availability' in video else None
+      g: List[Any] = list_until_empty(
+          video['genres']) if 'genres' in video else []
+      genres: List[str] = [find_genre_name(genre[1]) for genre in g]
+      moodTags = list_until_empty(
+          video['moodTags'], 'name') if 'moodTags' in video else []
+      creators = list_until_empty(
+          video['creators']) if people and 'creators' in video else []
+      creators = [people[id[1]]['name']['value'] for id in creators]
+      directors = list_until_empty(
+          video['directors']) if people and 'directors' in video else []
+      directors = [people[id[1]]['name']['value'] for id in directors]
+      writers = list_until_empty(
+          video['writers']) if people and 'writers' in video else []
+      writers = [people[id[1]]['name']['value'] for id in writers]
+      cast = list_until_empty(
+          video['cast']) if people and 'cast' in video else []
+      cast = [people[id[1]]['name']['value'] for id in cast]
+      shows[video_id].update({
+          'title': title,
+          'synopsis': synopsis,
+          'boxArt': boxArt,
+          'storyArt': storyArt,
+          'seasonCount': seasonCount,
+          'episodeCount': episodeCount,
+          'releaseYear': releaseYear,
+          'maturity': maturity,
+          'availability': availability,
+          'genres': genres,
+          'moodTags': moodTags,
+          'creators': creators,
+          'directors': directors,
+          'writers': writers,
+          'route': create_route(title, shows[video_id]['summary']['type'], 0),
+          'categories': find_categories(genres),
+      })
 
-  # except Exception as e:
-  #  print(e, shows[video_id])
+  except Exception as e:
+    return
+    print(e, shows[video_id])
 
 
 def get_videos(videos: Dict[str, Any]):
