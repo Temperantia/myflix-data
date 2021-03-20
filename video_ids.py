@@ -80,5 +80,3 @@ def get_ids():
   print('Collected ' + str(len(video_cleaned)) + ' titles and trailers')
   file.write_json('data/video_cleaned.json', video_cleaned)
   return video_cleaned
-
-get_ids()

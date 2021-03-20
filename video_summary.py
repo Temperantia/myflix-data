@@ -12,13 +12,10 @@ def fetch_video(id: str, shows_with_summary: Dict[str, Any]):
       "path": """["videos", """ + id + """, "summary"]"""}
   try:
     response = post(netflix.url, json=data, headers=netflix.headers)
-    print(data)
-    print(response)
     response = response.json()
     objects = response['jsonGraph']['videos']
     for video_id in objects:
       video = objects[video_id]
-      print(video)
       summary = video['summary']['value'] if 'summary' in video and 'value' in video['summary'] else None
       # and ('$type' in summary or summary['$type'] == 'error'):
       if summary and 'type' in summary and not summary['type'] == 'episode' and not summary['type'] == 'supplemental':
@@ -26,7 +23,6 @@ def fetch_video(id: str, shows_with_summary: Dict[str, Any]):
             'summary': summary,
         }
   except:
-    print(id)
     return
     print('error ' + id)
 
