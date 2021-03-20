@@ -32,7 +32,6 @@ def get_titles(index: List[int], videos: Dict[str, Any], videos_cleaned: Dict[st
       "path": '["videos", ' + dumps(index) + ', "parent"]'}
   try:
     response = post(netflix.url, json=data, headers=netflix.headers, timeout=10).json()
-    print(response)
     objects = response['jsonGraph']['videos']
     for (video_id, video) in objects.items():
       if 'value' in video['parent'] and isinstance(video['parent']['value'], list) and len(video['parent']['value']) == 2 and video['parent']['value'][1] == video_id:
